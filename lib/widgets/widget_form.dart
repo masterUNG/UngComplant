@@ -6,17 +6,20 @@ class WidgetForm extends StatelessWidget {
     Key? key,
     required this.hint,
     this.obsceu,
+    required this.changeFunc,
   }) : super(key: key);
 
   final String hint;
   final bool? obsceu;
+  final Function(String) changeFunc;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(top: 16),
       width: 250,
-      child: TextFormField(obscureText: obsceu ?? false,
+      child: TextFormField(onChanged: changeFunc,
+        obscureText: obsceu ?? false,
         decoration: InputDecoration(
             hintText: hint,
             border: InputBorder.none,

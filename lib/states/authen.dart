@@ -28,18 +28,27 @@ class Authen extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              WidgetForm(hint: 'User',),
+              WidgetForm(
+                hint: 'User',
+                changeFunc: (p0) {},
+              ),
             ],
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              WidgetForm(hint: 'Password', obsceu: true,),
-              
+              WidgetForm(
+                hint: 'Password',
+                obsceu: true,
+                changeFunc: (p0) {},
+              ),
             ],
           ),
-          const SizedBox(height: 16,),
-          Row(mainAxisAlignment: MainAxisAlignment.center,
+          const SizedBox(
+            height: 16,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               WidgetButton(
                 label: 'เข้าสู่ระบบ',
@@ -47,8 +56,11 @@ class Authen extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 16,),
-          Row(mainAxisAlignment: MainAxisAlignment.center,
+          const SizedBox(
+            height: 16,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               WidgetButton(
                 label: 'ลงทะเบียน',
