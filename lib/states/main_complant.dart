@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:ungcomplant/models/complant_model.dart';
 import 'package:ungcomplant/utility/app_constant.dart';
 import 'package:ungcomplant/utility/app_controller.dart';
 import 'package:ungcomplant/utility/app_service.dart';
@@ -24,6 +27,8 @@ class _MainComplantState extends State<MainComplant> {
     'ช้างป่า',
     'แจ้งเบาะแสการกระทำผิด (ยาเสพติด)',
   ];
+
+  String? detail;
 
   @override
   void initState() {
@@ -150,7 +155,7 @@ class _MainComplantState extends State<MainComplant> {
                 ),
                 appController.positions.isEmpty
                     ? const SizedBox()
-                    : Container(
+                    : SizedBox(
                         width: 250,
                         height: 200,
                         child: GoogleMap(
@@ -171,12 +176,49 @@ class _MainComplantState extends State<MainComplant> {
                       ),
                 WidgetForm(
                   hint: 'รายละเอียด',
-                  changeFunc: (p0) {},
+                  changeFunc: (p0) {
+                    detail = p0.trim();
+                  },
                 ),
-                Container(margin: const EdgeInsets.only(top: 16,bottom: 32),
+                Container(
+                  margin: const EdgeInsets.only(top: 16, bottom: 32),
                   child: WidgetButton(
                     label: 'ส่งเรื่อง',
-                    pressFunc: () {},
+                    pressFunc: () async {
+                      if (appController.typeComplants.length == 1) {
+                        Get.snackbar(
+                            'ยังไม่มีประเภทเรื่อง', 'โปรดเลือกประเภทเรื่อง',
+                            backgroundColor: Colors.orange);
+                      } else if (detail?.isEmpty ?? true) {
+                        Get.snackbar(
+                            'ไม่มีรายละเอียด', 'กรุณากรอกรายละเอียดด้วย',
+                            backgroundColor: Colors.orange);
+                      } else {
+                        var user = FirebaseAuth.instance.currentUser;
+                        ComplantModel model = ComplantModel(
+                            uidComplant: user!.uid,
+                            typeComplant: appController.typeComplants.last,
+                            displayWhoComplant:
+                                appController.displayWhoComplants.last,
+                            geoPoint: GeoPoint(
+                                appController.positions.last.latitude,
+                                appController.positions.last.longitude),
+                            detail: detail!,
+                            timestamp: Timestamp.fromDate(DateTime.now()));
+
+                        await FirebaseFirestore.instance
+                            .collection('complant')
+                            .doc()
+                            .set(model.toMap())
+                            .then((value) {
+                          Get.back();
+                          Get.snackbar(
+                            'ส่งข้อควมสำเร็จ',
+                            'ขอบคุณที่ ที่ส่งรายละเอียด',
+                          );
+                        });
+                      }
+                    },
                   ),
                 )
               ],
