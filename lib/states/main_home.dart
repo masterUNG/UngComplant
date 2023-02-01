@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ungcomplant/states/follow_complant.dart';
 import 'package:ungcomplant/utility/app_constant.dart';
+import 'package:ungcomplant/utility/app_service.dart';
 import 'package:ungcomplant/widgets/widget_button.dart';
 import 'package:ungcomplant/widgets/widget_icon_button.dart';
 import 'package:ungcomplant/widgets/widget_image.dart';
@@ -28,6 +30,12 @@ class _MainHomeState extends State<MainHome> {
     '/item3',
     '/item4',
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    AppService().processReadUserModels();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +76,9 @@ class _MainHomeState extends State<MainHome> {
               children: [
                 WidgetButton(
                   label: 'ติดตามเรื่อง',
-                  pressFunc: () {},
+                  pressFunc: () {
+                    Get.to(const FollowComplant());
+                  },
                 ),
               ],
             ),

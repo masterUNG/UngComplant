@@ -2,16 +2,56 @@
 
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:ungcomplant/models/complant_model.dart';
+import 'package:ungcomplant/models/user_model.dart';
 import 'package:ungcomplant/utility/app_controller.dart';
 import 'package:ungcomplant/utility/app_dialog.dart';
 import 'package:ungcomplant/widgets/widget_button.dart';
 
 class AppService {
+  AppController appController = Get.put(AppController());
+
+  Future<void> processReadUserModels() async {
+    var user = FirebaseAuth.instance.currentUser;
+    await FirebaseFirestore.instance
+        .collection('user')
+        .doc(user!.uid)
+        .get()
+        .then((value) {
+      UserModel model = UserModel.fromMap(value.data()!);
+      appController.userModels.add(model);
+    });
+  }
+
+  String changDateTime({required String format, required DateTime dateTime}) {
+    DateFormat dateFormat = DateFormat(format);
+    return dateFormat.format(dateTime);
+  }
+
+  Future<void> readAllComplants() async {
+    if (appController.complantModels.isNotEmpty) {
+      appController.complantModels.clear();
+    }
+
+    await FirebaseFirestore.instance
+        .collection('complant')
+        .orderBy('timestamp', descending: true)
+        .get()
+        .then((value) {
+      for (var element in value.docs) {
+        ComplantModel model = ComplantModel.fromMap(element.data());
+        appController.complantModels.add(model);
+      }
+    });
+  }
+
   Future<void> processGetLocation({required BuildContext context}) async {
-    AppController appController = Get.put(AppController());
     bool locationServiceEnable = await Geolocator.isLocationServiceEnabled();
     LocationPermission locationPermission;
 
@@ -35,9 +75,9 @@ class AppService {
           }
         } else {
           //OK Can find Location
-           await Geolocator.getCurrentPosition().then((value) {
-              appController.positions.add(value);
-            });
+          await Geolocator.getCurrentPosition().then((value) {
+            appController.positions.add(value);
+          });
         }
       }
     } else {

@@ -10,6 +10,7 @@ class ComplantModel {
   final GeoPoint geoPoint;
   final String detail;
   final Timestamp timestamp;
+  final String? status;
   ComplantModel({
     required this.uidComplant,
     required this.typeComplant,
@@ -17,6 +18,7 @@ class ComplantModel {
     required this.geoPoint,
     required this.detail,
     required this.timestamp,
+    this.status,
   });
 
   Map<String, dynamic> toMap() {
@@ -27,6 +29,7 @@ class ComplantModel {
       'geoPoint': geoPoint,
       'detail': detail,
       'timestamp': timestamp,
+      'status': status,
     };
   }
 
@@ -35,13 +38,18 @@ class ComplantModel {
       uidComplant: (map['uidComplant'] ?? '') as String,
       typeComplant: (map['typeComplant'] ?? '') as String,
       displayWhoComplant: (map['displayWhoComplant'] ?? false) as bool,
-      geoPoint: (map['geoPoint']),
       detail: (map['detail'] ?? '') as String,
-      timestamp:(map['timestamp']),
+      status: map['status'] ?? '',
+      timestamp: (map['timestamp']),
+      geoPoint: (map['geoPoint']),
     );
   }
 
+  // timestamp:(map['timestamp']),
+  // geoPoint: (map['geoPoint']),
+
   String toJson() => json.encode(toMap());
 
-  factory ComplantModel.fromJson(String source) => ComplantModel.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory ComplantModel.fromJson(String source) =>
+      ComplantModel.fromMap(json.decode(source) as Map<String, dynamic>);
 }

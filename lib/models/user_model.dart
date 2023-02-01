@@ -7,12 +7,14 @@ class UserModel {
   final String gendle;
   final String name;
   final String surname;
+  final bool? admin;
   UserModel({
     required this.email,
     required this.password,
     required this.gendle,
     required this.name,
     required this.surname,
+    this.admin,
   });
 
   Map<String, dynamic> toMap() {
@@ -22,6 +24,7 @@ class UserModel {
       'gendle': gendle,
       'name': name,
       'surname': surname,
+      'admin': admin,
     };
   }
 
@@ -32,10 +35,12 @@ class UserModel {
       gendle: (map['gendle'] ?? '') as String,
       name: (map['name'] ?? '') as String,
       surname: (map['surname'] ?? '') as String,
+      admin: map['admin'] ?? false,
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory UserModel.fromJson(String source) => UserModel.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory UserModel.fromJson(String source) =>
+      UserModel.fromMap(json.decode(source) as Map<String, dynamic>);
 }

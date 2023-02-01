@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +48,7 @@ class _MainComplantState extends State<MainComplant> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: WidgetText(text: 'เรื่องร้องทุกข์'),
+        title: const WidgetText(text: 'เรื่องร้องทุกข์'),
       ),
       body: GetX(
           init: AppController(),
