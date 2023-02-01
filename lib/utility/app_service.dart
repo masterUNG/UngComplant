@@ -37,6 +37,7 @@ class AppService {
   Future<void> readAllComplants() async {
     if (appController.complantModels.isNotEmpty) {
       appController.complantModels.clear();
+      appController.docIdComplants.clear();
     }
 
     await FirebaseFirestore.instance
@@ -47,6 +48,7 @@ class AppService {
       for (var element in value.docs) {
         ComplantModel model = ComplantModel.fromMap(element.data());
         appController.complantModels.add(model);
+        appController.docIdComplants.add(element.id);
       }
     });
   }

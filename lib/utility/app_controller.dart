@@ -10,6 +10,8 @@ class AppController extends GetxController {
   RxList displayWhoComplants = <bool>[false].obs;
   RxList positions = <Position>[].obs;
   RxList complantModels = <ComplantModel>[].obs;
+  RxList docIdComplants = <String>[].obs;
   RxList userModels = <UserModel>[].obs;
+  RxList chooseStatuss = <String?>[null].obs;
   
 }

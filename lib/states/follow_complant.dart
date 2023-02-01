@@ -42,10 +42,15 @@ class _FollowComplantState extends State<FollowComplant> {
                     'appController.userModels.last.admin.value ===> ${appController.userModels.last.admin}');
                 // print('result == $result1');
                 if (appController.userModels.last.admin) {
-                  Get.to(const DetailComplant());
+                  Get.to(DetailComplant(
+                    complantModel: appController.complantModels[index],
+                    docIdComplant: appController.docIdComplants[index],
+                  ))!
+                      .then((value) => AppService().readAllComplants());
                 } else {
                   Get.snackbar(
-                      'สำหรับ Admin', 'Feture นี่สำหรับ Admin เท่านั้น', backgroundColor: Colors.orange);
+                      'สำหรับ Admin', 'Feture นี่สำหรับ Admin เท่านั้น',
+                      backgroundColor: Colors.orange);
                 }
               },
               child: Card(
